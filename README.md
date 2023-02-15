@@ -59,7 +59,7 @@ The contents of the `dist` folder are replicated on the reMarkable:
 scp dist/home/crypto/bin/* remarkable:/home/crypto/bin/
 scp dist/home/crypto/lib/* remarkable:/home/crypto/lib/
 scp dist/etc/systemd/system/cryptodaemon.service remarkable:/etc/systemd/system/
-scp dist/etc/systemd/system/framebufferserver.service remarkable:/etc/systemd/system/
+scp dist/etc/systemd/system/rm2fb.service remarkable:/etc/systemd/system/
 ```
 
 The setup can then be completed on the reMarkable:
@@ -74,7 +74,7 @@ systemctl daemon-reload
 systemctl stop xochitl
 
 # After this step the screen will become blank
-systemctl enable framebufferserver --now
+systemctl enable rm2fb --now
 
 # Enable and start setup of the encrypted filesystem.
 # Enter a password, afterwards the screen will be blank again.

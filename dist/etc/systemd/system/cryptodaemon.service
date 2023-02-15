@@ -1,6 +1,6 @@
 [Unit]
 Description=Cryptodaemon
-Requires=home.mount framebufferserver.service
+Requires=home.mount rm2fb.service
 Before=xochitl.service launcher.service sync.service tarnish.service
 
 [Service]
