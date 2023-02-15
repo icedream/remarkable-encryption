@@ -12,7 +12,7 @@ import (
 )
 
 func passphraseFromNet(ctx context.Context, addr string, logWriter io.Writer) (chan string, error) {
-	logger := log.New(logWriter, "passphrase from netwok: ", 0)
+	logger := log.New(logWriter, "passphrase from network: ", 0)
 
 	passwordChan := make(chan string, 1)
 
