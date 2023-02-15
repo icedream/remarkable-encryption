@@ -70,17 +70,20 @@ chmod u+x /home/crypto/bin/*
 PATH=/home/crypto/bin gocryptfs -init /home/crypto/fs
 systemctl daemon-reload
 
-# WARNING: after the next step, xochitl (on plaintext home directory)
-# won't start by default anymore
-systemctl disable xochitl --now
+# Stop the running xochitl (on plaintext home directory).
+systemctl stop xochitl
 
-# after this step the screen will become blank
+# After this step the screen will become blank
 systemctl enable framebufferserver --now
 
-# WARNING: After entering the password, xochitl will start with the
-# encrypted filesystem which is still empty. This means that the
+# Enable and start setup of the encrypted filesystem.
+# Enter a password, afterwards the screen will be blank again.
+# WARNING: At this point all unencrypted data has been wiped,
 # device setup starts again and A NEW SSH PASSPHRASE IS SET.
 systemctl enable cryptodaemon --now
+
+# Start xochitl on now encrypted filesystem.
+systemctl start xochitl
 ```
 
 # Contributions

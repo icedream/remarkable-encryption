@@ -5,11 +5,29 @@ import (
 	"context"
 	"fmt"
 	"os/exec"
+
+	"github.com/coreos/go-systemd/v22/daemon"
 )
 
 func xochitl(ctx context.Context) (kill func() error, result chan error) {
 	result = make(chan error, 1)
 
+	if ok, err := daemon.SdNotify(false, daemon.SdNotifyReady); ok {
+		kill = func() error {
+			_, err := daemon.SdNotify(false, daemon.SdNotifyStopping)
+
+			return err
+		}
+
+		return kill, result
+	} else if err != nil {
+		result <- fmt.Errorf("notifying systemd: %w", err)
+		close(result)
+
+		return nil, result
+	}
+
+	// no systemd - start xochitl ourselves
 	var stdErr bytes.Buffer
 
 	cmd := exec.CommandContext(ctx, "xochitl", "--system")
