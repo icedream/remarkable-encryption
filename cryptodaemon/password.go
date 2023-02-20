@@ -157,8 +157,6 @@ func getPassphrase(ctx context.Context, logWriter io.Writer, notifyIncorrect boo
 func qtApplication(ctx context.Context, name string, args ...string) exec.Cmd {
 	cmd := exec.CommandContext(ctx, findExecutable(name), args...) //nolint:gosec
 
-	cmd.Env = append(environmentWithCustomBinaries(), "LD_PRELOAD="+frameBufferClientSO)
-
 	return *cmd
 }
 

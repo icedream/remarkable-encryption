@@ -20,7 +20,6 @@ const (
 	rootDir              = "/home/crypto"
 	mountPoint           = "/home/root"
 	listenAddress        = "0.0.0.0:1234"
-	frameBufferClientSO  = "/home/crypto/lib/librm2fb_client.so"
 )
 
 var (

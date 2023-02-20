@@ -144,7 +144,6 @@ func (cm *CryptoMount) mount(ctx context.Context, passphrase string) error { //n
 	cmd := exec.CommandContext(ctx, findExecutable("gocryptfs"), "-fg", "-nonempty",
 		fmt.Sprintf("-notifypid=%d", os.Getpid()), cm.cryptoFS, mountPoint)
 
-	cmd.Env = environmentWithCustomBinaries()
 	cmd.Stdout = NewLogger(cm.log, "gocryptfs: ")
 	cmd.Stdin = strings.NewReader(passphrase + "\n")
 	cmd.Stderr = &stdErr
@@ -209,32 +208,6 @@ func wrapMountError(err error, stdErr string) error {
 	}
 
 	return err
-}
-
-// environmentWithCustomBinaries returns the current environment variables
-// with the PATH variable modified to include in directory with the binaries
-// required by the cryptodaemon.
-func environmentWithCustomBinaries() []string {
-	parentEnv := os.Environ()
-
-	env := make([]string, 0, len(parentEnv))
-
-	hasPATH := false
-
-	for _, variable := range parentEnv {
-		if strings.HasPrefix(variable, "PATH=") {
-			hasPATH = true
-			variable = variable + ":" + binDir
-		}
-
-		env = append(env, variable)
-	}
-
-	if !hasPATH {
-		env = append(env, "PATH="+binDir)
-	}
-
-	return env
 }
 
 // Unmount unmounts the crypto filesystem. If it was not mounted
