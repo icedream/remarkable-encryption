@@ -73,7 +73,7 @@ func main() {
 	}
 }
 
-// nolint:cyclop
+//nolint:cyclop
 func run(ctx context.Context, cm *CryptoMount, logger *Logger) error {
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
