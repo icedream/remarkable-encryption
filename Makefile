@@ -12,6 +12,7 @@ exec_prefix=$(prefix)
 libexecdir=$(exec_prefix)/libexec
 LIBEXECDIR_CRYPTODAEMON=$(libexecdir)/cryptodaemon
 sysconfdir=$(prefix)/etc
+SYSTEMD_SYSCONFDIR=/etc/systemd
 INTDIR=.build
 DISTDIR=dist
 DISTBINDIR=$(DISTDIR)/$(ROOTDIR)/bin
@@ -170,12 +171,12 @@ install: $(addprefix $(INTDIR)/,$(SBINARIES) $(LIBEXECBINARIES)) $(INTDIR)/crypt
 		$(DESTDIR)$(sysconfdir)/systemd/system
 	install -Dm0755 $(addprefix $(INTDIR)/,$(SBINARIES)) $(DESTDIR)$(sbindir)
 	install -Dm0755 $(addprefix $(INTDIR)/,$(LIBEXECBINARIES)) $(DESTDIR)$(LIBEXECDIR_CRYPTODAEMON)
-	install -Dm0644 $(INTDIR)/cryptodaemon.service $(DESTDIR)$(sysconfdir)/systemd/system/
+	install -Dm0644 $(INTDIR)/cryptodaemon.service $(SYSTEMD_SYSCONFDIR)/systemd/system/
 
 uninstall:
-	rm $(addprefix $(sbindir)/,$(BINARIES))
-	rm -r $(LIBEXECDIR_CRYPTODAEMON)
-	rm $(sysconfdir)/systemd/system/cryptodaemon.service
+	$(RM) $(addprefix $(sbindir)/,$(BINARIES))
+	$(RM) -r $(LIBEXECDIR_CRYPTODAEMON)
+	$(RM) $(SYSTEMD_SYSCONFDIR)/system/cryptodaemon.service
 
 docker-dist:
 	docker build -t remarkable-crypto-toolchain .
