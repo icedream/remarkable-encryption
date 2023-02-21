@@ -183,7 +183,7 @@ docker-dist:
 		-e GOPATH=/var/tmp/go \
 		-e HOME=/var/tmp/home \
 		-w $(CURDIR) -v $(CURDIR):$(CURDIR) \
-		remarkable-crypto-toolchain $(MAKE)
+		remarkable-crypto-toolchain $(MAKE) dist $(MAKEFLAGS)
 
 docker-install:
 	docker build -t remarkable-crypto-toolchain .
@@ -191,4 +191,4 @@ docker-install:
 		-e GOPATH=/var/tmp/go \
 		-e HOME=/var/tmp/home \
 		-w $(CURDIR) -v $(CURDIR):$(CURDIR) \
-		remarkable-crypto-toolchain $(MAKE) install DESTDIR=$(DESTDIR)
+		remarkable-crypto-toolchain $(MAKE) install $(MAKEFLAGS)
