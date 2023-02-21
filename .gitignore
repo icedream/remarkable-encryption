@@ -1,3 +1,4 @@
+/.build/
 /testdata/fs
 /testdata/mnt
 /remarkable-crypto
@@ -10,6 +11,7 @@
 /dist/home/crypto/bin/post-updater
 /dist/home/crypto/bin/fusermount
 /dist/home/crypto/lib
+*.deb
 *.stash
 *.pro.user
 *.o

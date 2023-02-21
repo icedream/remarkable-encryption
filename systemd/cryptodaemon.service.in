@@ -5,9 +5,9 @@ Before=xochitl.service launcher.service sync.service tarnish.service
 
 [Service]
 Type=notify
-ExecStart=/home/crypto/bin/cryptodaemon
+ExecStart=@sbindir@/cryptodaemon -libexecpath @LIBEXECDIR_CRYPTODAEMON@
 Restart=on-failure
-Environment=LD_PRELOAD=/home/crypto/lib/librm2fb_client.so
+Environment=LD_PRELOAD=@LIBRM2FB_CLIENT_SO_PATH@
 # allow cleanup by new subprocesses after SIGTERM
 KillMode=mixed
 # do not time out and progress with bootup
