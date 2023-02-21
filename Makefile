@@ -28,6 +28,8 @@ LIBEXECBINARIES=\
 BINARIES_GO=\
 	cryptodaemon \
 	gocryptfs
+SBINARIES_GO=\
+	cryptodaemon
 BINARIES_QT=\
 	password_prompt \
 	print
@@ -164,14 +166,19 @@ clean:
 	$(MAKE) -C gui/password_prompt clean
 	$(MAKE) -C gui/print clean
 
-install: $(addprefix $(INTDIR)/,$(SBINARIES) $(LIBEXECBINARIES)) $(INTDIR)/cryptodaemon.service
+install: install-go install-qt 
+
+install-go: $(addprefix $(INTDIR)/,$(SBINARIES_GO)) $(INTDIR)/cryptodaemon.service
 	mkdir -p \
 		$(DESTDIR)$(sbindir) \
-		$(DESTDIR)$(LIBEXECDIR_CRYPTODAEMON) \
-		$(DESTDIR)$(sysconfdir)/systemd/system
-	install -Dm0755 $(addprefix $(INTDIR)/,$(SBINARIES)) $(DESTDIR)$(sbindir)
+		$(DESTDIR)$(SYSTEMD_SYSCONFDIR)/system
+	install -Dm0755 $(addprefix $(INTDIR)/,$(SBINARIES_GO)) $(DESTDIR)$(sbindir)
+	install -Dm0644 $(INTDIR)/cryptodaemon.service $(DESTDIR)$(SYSTEMD_SYSCONFDIR)/system/
+
+install-qt: $(addprefix $(INTDIR)/,$(LIBEXECBINARIES))
+	mkdir -p \
+		$(DESTDIR)$(LIBEXECDIR_CRYPTODAEMON)
 	install -Dm0755 $(addprefix $(INTDIR)/,$(LIBEXECBINARIES)) $(DESTDIR)$(LIBEXECDIR_CRYPTODAEMON)
-	install -Dm0644 $(INTDIR)/cryptodaemon.service $(SYSTEMD_SYSCONFDIR)/systemd/system/
 
 uninstall:
 	$(RM) $(addprefix $(sbindir)/,$(BINARIES))
