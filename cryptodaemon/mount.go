@@ -142,7 +142,7 @@ func (cm *CryptoMount) mount(ctx context.Context, passphrase string) error { //n
 
 	//nolint:gosec
 	cmd := exec.CommandContext(ctx, findExecutable("gocryptfs"), "-fg", "-nonempty",
-		fmt.Sprintf("-notifypid=%d", os.Getpid()), cm.cryptoFS, mountPoint)
+		fmt.Sprintf("-notifypid=%d", os.Getpid()), cm.cryptoFS, cm.mountPoint)
 
 	cmd.Stdout = NewLogger(cm.log, "gocryptfs: ")
 	cmd.Stdin = strings.NewReader(passphrase + "\n")
@@ -225,7 +225,7 @@ func (cm *CryptoMount) Unmount() error {
 	var stdErr bytes.Buffer
 
 	//nolint:gosec
-	cmd := exec.Command(findExecutable("fusermount"), "-u", mountPoint)
+	cmd := exec.Command(findExecutable("fusermount"), "-u", cm.mountPoint)
 	cmd.Stderr = &stdErr
 	cmd.Stdout = NewLogger(cm.log, "fusermount: ")
 

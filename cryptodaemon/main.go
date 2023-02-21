@@ -4,12 +4,14 @@ import (
 	"bytes"
 	"context"
 	"errors"
+	"flag"
 	"fmt"
 	"io"
 	"log"
 	"os"
 	"os/signal"
 	"path/filepath"
+	"strings"
 	"syscall"
 	"time"
 )
@@ -18,16 +20,34 @@ const (
 	maxImmediateRestarts = 3
 	immediateRestartTime = 10 * time.Second
 	rootDir              = "/home/crypto"
-	mountPoint           = "/home/root"
 	listenAddress        = "0.0.0.0:1234"
 )
 
-var (
-	binDir   = filepath.Join(rootDir, "bin")
-	cryptoFS = filepath.Join(rootDir, "fs")
-)
+var binDir = filepath.Join(rootDir, "bin")
 
 func main() {
+	// fetch paths from command line
+	libexecPathFlag := flag.String("libexecpath", "/usr/libexec/cryptodaemon",
+		"Path containing password_prompt and print binaries needed by cryptodaemon")
+	cryptoFSFlag := flag.String("source", "/home/crypto/fs", "Path to cryptofs directory")
+	mountPointFlag := flag.String("mountpoint", "/home/root", "Target mountpoint path")
+
+	flag.Parse()
+
+	// use libexec bin dir if it exists
+	if fsInfo, err := os.Stat(*libexecPathFlag); err == nil && fsInfo.IsDir() {
+		binDir = *libexecPathFlag
+	}
+
+	// add bin dir to path
+	os.Setenv("PATH", strings.Join([]string{
+		binDir,
+		os.Getenv("PATH"),
+	}, string(os.PathListSeparator)))
+
+	cryptoFS := *cryptoFSFlag
+	mountPoint := *mountPointFlag
+
 	logger := NewLogger(os.Stdout, "")
 
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
