@@ -66,6 +66,10 @@ dist_tar: dist
 dist_systemd: $(DISTETCDIR)/systemd/system/cryptodaemon.service
 	install -Dm0644 systemd/rm2fb.service $(DISTETCDIR)/systemd/system
 
+bin_go: $(addprefix $(INTDIR)/,$(SBINARIES_GO))
+
+bin_qt: $(addprefix $(INTDIR)/,$(BINARIES_QT))
+
 $(INTDIR):
 	mkdir -p $(INTDIR)
 
