@@ -12,6 +12,7 @@ Environment=LD_PRELOAD=@LIBRM2FB_CLIENT_SO_PATH@
 KillMode=mixed
 # do not time out and progress with bootup
 TimeoutStartSec=infinity
+Environment="PATH=/opt/bin:/opt/sbin:/opt/usr/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin"
 
 [Install]
 WantedBy=multi-user.target
